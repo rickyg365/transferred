@@ -22,8 +22,8 @@ source: https://covid19.ca.gov/state-dashboard/
 
 
 def clear_screen():
-    os.system("clear")
-
+    # os.system("clear")
+    pass
 
 class Covid:
     def __init__(self):
