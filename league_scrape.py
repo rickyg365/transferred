@@ -1,3 +1,4 @@
+#!/bin/python
 import os
 import sys
 import requests
@@ -14,7 +15,7 @@ source: https://covid19.ca.gov/state-dashboard/
 
 
 def clear_screen():
-    os.system("cls")
+    os.system("clear")
 
 
 class Ability():
