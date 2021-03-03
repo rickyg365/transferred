@@ -32,7 +32,8 @@ import time
     - Randomize cycle Order
 
 """
-
+def clear_screen():
+    os.system("clear")
 
 def text_wrap(raw_text):
     '''
@@ -173,7 +174,7 @@ class StudyCards:
             menu = True
 
             while menu:
-                os.system("cls")
+                clear_screen()
                 print(f"{self.group_name}:\n")
                 print(card)
 
@@ -194,7 +195,7 @@ s.add_card('Card Title', t, g)
 s.add_card('Card Title2', t, g)
 s.add_card('Card Title3', t, g)
 s.cycle()
-os.system("cls")
+clear_screen()
 print(s)
 
 # menu = True
