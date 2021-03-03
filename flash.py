@@ -166,6 +166,32 @@ class StudyCards:
         # self.card_list.append(new_card)
         self.card_list.append(Card(title, front, back))
 
+    def set_data(self, filename):
+        id_num = 1
+        with open(filename, 'r+') as f:
+            new_obj = []
+            card_data = []
+            for line in f:
+                # print(line)
+                if line.strip() == '+':
+                    print('i')
+                    card_data.append(new_obj)
+                    new_obj = []
+                elif line.strip() == '@':
+                    print('e1')
+                    card_data.append(new_obj)
+                    current_id = f"00{id_num}"
+                    new_card = Card(current_id, card_data[0], card_data[1])
+                    self.card_list.append(new_card)
+
+                    id_num += 1
+                    new_obj = []
+                    card_data = []
+                else:
+                    print(line)
+                    print(card_data)
+                    new_obj.append(f"{line.strip()}")
+
     def cycle(self):
         flip_choices = 'fF yY'
         not_flip = 'nN'
@@ -191,9 +217,10 @@ class StudyCards:
 
 
 s = StudyCards('Sample')
-s.add_card('Card Title', t, g)
-s.add_card('Card Title2', t, g)
+# s.add_card('Card Title', t, g)
+# s.add_card('Card Title2', t, g)
 s.add_card('Card Title3', t, g)
+s.set_data('flash_data.txt')
 s.cycle()
 clear_screen()
 print(s)
