@@ -31,6 +31,8 @@ import time
     
     - Randomize cycle Order
 
+    - Remove staus screen at the end, good for quizzes not flash cards
+
 """
 def clear_screen():
     os.system("clear")
