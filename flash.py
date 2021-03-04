@@ -11,6 +11,8 @@ import time
 | Goals |
 '-------'
 
+Using text file
+________________________________________
     Example.txt
         .------------------------------.
         |fline1                        |  
@@ -24,7 +26,17 @@ import time
         |...                           |  
         |@ # Flash card separater      |
         |...                           |  
-        '------------------------------'                              
+        '------------------------------'
+     - set_data(filename) method
+        
+        
+Using json file
+________________________________________
+    - Need Dump/load method
+    - Need add and remove method
+    - 
+        
+                                      
     
     - Change Card Title to an ID variable to be able to call on specific cards
     
@@ -112,7 +124,7 @@ class Card:
         # Could just use 1 variable, True means front, False means back...
 
     def __str__(self):
-        # txt = f"{self.title}: \n"
+        # Adds right justified ID above card
         identity = f"ID# {self.id}"
         txt = f"{identity.rjust(46)}\n"
 
@@ -164,6 +176,7 @@ class StudyCards:
         self.card_list.append(Card(card_id, front, back))
 
     def set_data(self, filename):
+        # Using Text File
         id_num = 1
         with open(filename, 'r+') as f:
             new_obj = []
