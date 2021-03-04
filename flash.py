@@ -2,6 +2,7 @@
 import os
 import sys
 
+import json
 import random
 import time
 
@@ -9,9 +10,7 @@ import time
 .-------.
 | Goals |
 '-------'
-    
-    - Read in flash cards from a file
-    
+
     Example.txt
         .------------------------------.
         |fline1                        |  
@@ -30,17 +29,18 @@ import time
     - Change Card Title to an ID variable to be able to call on specific cards
     
     - Randomize cycle Order
-
-    - Remove staus screen at the end, good for quizzes not flash cards
+    
+    - Instead of using a text file and this weird format try doing a version where we use a json file 
 
 """
+
+
 def clear_screen():
     os.system("clear")
 
-def text_wrap(raw_text):
-    '''
-    Wraps text in
 
+def text_wrap(raw_text):
+    """ Wraps text in
     .-------------------------------------------.
     |                                           |
     |                  line1                    |    # 45 char: 2 |, 2 " ", 42 text [2 ' ', line z, x * ' '
@@ -51,19 +51,22 @@ def text_wrap(raw_text):
     |                  line6                    |
     |                                           |
     '-------------------------------------------'
-limit of 6 lines of text:
-    '''
-    # # Split text into an array
-    # text_array = raw_text.split("\n")
-    # Input shoulda laready be in an array
+    * limit of 6 lines of text... for now...
+
+    To Use: # print(text_wrap(t))
+    """
+    # Variables
     output_array = []
-    # Loop and add wrap
+
+    # Loop through lines (up to 6)
     for i in range(6):
+        # Variables
         line = raw_text[i]
+
         # Makes sure line doesnt exceed flash card
         if len(line) > 40:
             line = line[0:40]
-        # diff = 46 - len(line)
+
         text = line.ljust(40)
         new_line = f"|   {text} |"
         output_array.append(new_line)
@@ -71,17 +74,14 @@ limit of 6 lines of text:
     # Consolidate output array
     output_text = f".{44*'-'}.\n|{44*' '}|\n"
 
+    # Join formatted output text into a single string : array -> str
     output_text += '\n'.join(output_array)
-
-    # for new in output_array:
-    #     output_text +=
 
     output_text += f"\n|{44*' '}|\n'{44*'-'}'"
 
     return output_text
 
 
-# Try text wrap function
 t = [
     'Title: Line 1',
     '   Guess who\'s that pokemon!',
@@ -92,33 +92,31 @@ t = [
 ]
 
 g = ['line 1: back', 'line 2: back', 'line 3: back', 'line 4: back', 'line 5: back'.center(38), 'line 6: back']
-# print(text_wrap(t))
-
-
-# Parse a file and convert each flash card text into an array that can be used with text wrap
-# or re define textwrap()
-class Parse:
-    def __init__(self):
-        pass
-
-    def __str__(self):
-        pass
 
 
 class Card:
-    def __init__(self, title, front_data, back_data):
-        self.title = title
+    """
+    Card Object to store individual flash cards
 
-        # only 6 lines in data
+    To Use: # c = Card('Pokemon', t, s)
+    """
+    def __init__(self, id_num, front_data, back_data):
+        self.id = id_num
+
+        # Takes data in array form and uses textwrap func. to create flash card string
         self.front = text_wrap(front_data)
         self.back = text_wrap(back_data)
 
+        # dict keeps track of which face is showing
         self.current_view = {'front': True, 'back': False}
+        # Could just use 1 variable, True means front, False means back...
 
     def __str__(self):
         # txt = f"{self.title}: \n"
-        txt = ""
+        identity = f"ID# {self.id}"
+        txt = f"{identity.rjust(46)}\n"
 
+        # Check current view
         if self.current_view['front']:
             txt += self.front
         elif self.current_view['back']:
@@ -129,6 +127,7 @@ class Card:
         return txt
 
     def flip(self):
+        # Checks current view and flips states
         if self.current_view['front']:
             self.current_view['front'] = False
             self.current_view['back'] = True
@@ -137,9 +136,7 @@ class Card:
             self.current_view['back'] = False
         else:
             print("something weird happened card.flip")
-
-
-# c = Card('Pokemon', t, s)
+        # A single T/F variable would get rid of this
 
 
 class StudyCards:
@@ -147,26 +144,24 @@ class StudyCards:
         self.group_name = group_name
         self.card_list = []
 
+        # TBI
         self.current = None
         self.next = None
         self.previous = None
 
     def __str__(self):
-        txt = ""
-        txt += f"Group: {self.group_name}"
+        # txt = ""
+        txt = f"Group: {self.group_name}"
         for c in self.card_list:
             # txt += f"\n{c.title}"
-            txt += "\n"
+            txt += f"\n"
             txt += f"\nFront:\n{c.front}"
             txt += f"\nBack:\n{c.back}"
 
         return txt
 
-    def add_card(self, title, front, back):
-        # Can do one liner but idk whats more visible or clearer
-        # new_card = Card(title, front, back)
-        # self.card_list.append(new_card)
-        self.card_list.append(Card(title, front, back))
+    def add_card(self, card_id, front, back):
+        self.card_list.append(Card(card_id, front, back))
 
     def set_data(self, filename):
         id_num = 1
