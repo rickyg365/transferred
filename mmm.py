@@ -12,6 +12,10 @@ Date: 03/08/2021
 """
 
 
+def clear_screen():
+    os.system("cls")
+
+
 class Matrix:
     def __init__(self, rows=1, cols=1):
         # Size (mxn)
@@ -167,6 +171,64 @@ class Matrix:
     #         new_m.append(m1[i] + m2[i])
     #
     #     self.set_matrix(new_m)
+
+
+if __name__ == "__main__":
+    def parse_size(raw_input):
+        valid_sep = ['x', ' ', '.', ',']
+        split_input = []
+
+        for char in raw_input:
+            if char in valid_sep:
+                split_input = raw_input.split(char)
+
+        new_output = []
+        for item in split_input:
+            new_output.append(int(item))
+
+        return new_output
+
+
+    active = True
+
+    Matrices = []
+    current_matrix = []
+
+    while active:
+
+        # Display
+        clear_screen()
+        # print(37*'_')
+        print(current_matrix)
+        # print(37 * '_')
+
+        action = input("\nWhat would you like to do?:\n \n [C]: Change Matrix\n [A]: Add Matrix\n [Q]: Quit\n>>> ")
+
+        if action.upper() == 'Q' or action.upper() == 'QUIT':
+            active = False
+        elif action.upper() == 'C':
+            new_matrix = {}
+            en = 1
+            for matri in Matrices:
+                new_matrix[f"{en}"] = matri
+                print(f"{en}:\n{matri}")
+                en += 1
+
+            change = input("\nWhich matrix would you like to use?: ")
+
+            if change in new_matrix.keys():
+                current_matrix = new_matrix[change]
+            else:
+                print("Something went wrong the number you input did not match any of the keys")
+        elif action.upper() == 'A':
+            size = input("\nWhat size matrix?: ")
+            m, n = parse_size(size)
+
+            current_matrix = Matrix(m, n)
+            Matrices.append(current_matrix)
+
+        else:
+            print("Invalid Input")
 
 
 m = Matrix(3, 3)
