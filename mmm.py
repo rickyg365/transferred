@@ -23,27 +23,62 @@ class Matrix:
         self.max_char_length = 0
 
         # Create Matrix
-        '''
-        matrix = 
-        [1 0 0]
-        [0 1 0]
-        [0 0 1]
-        
-        self.data = [1,0,0,0,1,0,0,0,1]
-        '''
         self.matrix = []
         self.update(self.m, self.n)
 
     def __str__(self):
+        # Top Line
         line = '\n'  # ".-     -.\n"
+        # In Between
         for row in self.matrix:
             # line += '| '
             for item in row:
                 line += f" {item}" + (self.max_char_length - (len(f"{item}"))) * ' '
             line += '\n'
             line += '\n'  # '|\n'
+        # Footer
         # line += "'-     -'"
         return line
+
+    def __add__(self, other):
+        # Add the add function here
+        # Assuming both matrices have exact same dimensions
+        new_m = []
+
+        # Flatten 1st Matrix
+        m1 = self.flatten(self)
+        # Flatten 2nd Matrix
+        m2 = self.flatten(other)
+
+        # Total number of entries
+        l = len(m1)
+
+        # Displaying (Can comment this out to not print the addition)
+        rower = []
+        c = 0
+        for si in range(self.m):
+            row = ""
+            for ci in range(self.n):
+                row += f" ({m1[c]} + {m2[c]}) "
+                c += 1
+            rower.append(row)
+
+        # Printing
+        for row in rower:
+            print(row)
+            print('\n')
+
+        # Creating new flattened matrix by adding entries
+        for i in range(l):
+            new_m.append(m1[i] + m2[i])
+
+        # Create new matrix object and set size
+        new_matrix = Matrix(self.m, self.n)
+
+        # Set values of matrix using new flattened matrix
+        new_matrix.set_matrix(new_m)
+
+        return new_matrix
 
     def flatten(self, matrix_list):
         data = []
@@ -99,17 +134,33 @@ class Matrix:
                 else:
                     self.matrix[i][j] = 0
 
-    def add(self, matrix_obj):
-        m1 = self.flatten(self)
-        m2 = self.flatten(matrix_obj)
-        new_m = []
-
-        l = len(m1)
-
-        for i in range(l):
-            new_m.append(m1[i] + m2[i])
-
-        self.set_matrix(new_m)
+    # def add(self, matrix_obj):
+    #     m1 = self.flatten(self)
+    #     m2 = self.flatten(matrix_obj)
+    #     new_m = []
+    #
+    #     l = len(m1)
+    #
+    #     # displaying
+    #     rower = []
+    #     c = 0
+    #     for si in range(self.m):
+    #         row = ""
+    #         for ci in range(self.n):
+    #
+    #             row += f" ({m1[c]} + {m2[c]}) "
+    #             c += 1
+    #         rower.append(row)
+    #
+    #     for row in rower:
+    #         print(row)
+    #         print('\n')
+    #
+    #     #
+    #     for i in range(l):
+    #         new_m.append(m1[i] + m2[i])
+    #
+    #     self.set_matrix(new_m)
 
 
 m = Matrix(3, 3)
@@ -117,10 +168,11 @@ k = Matrix(3, 3)
 m.identity()
 
 
-print(m.matrix)
+# print(m.matrix)
 print(m)
 
 print(k)
 
-k.add(m)
-print(k)
+# k.add(m)
+newest = k + m
+print(newest)
