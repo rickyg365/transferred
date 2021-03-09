@@ -26,6 +26,9 @@ class Matrix:
         self.matrix = []
         self.update(self.m, self.n)
 
+        # Store flattened data for easier access?
+        self.flat_matrix = []
+
     def __str__(self):
         # Top Line
         line = '\n'  # ".-     -.\n"
@@ -81,11 +84,13 @@ class Matrix:
         return new_matrix
 
     def flatten(self, matrix_list):
+        # Inititalize list of new flattened data
         data = []
 
         y = matrix_list.m  # Height or num of rows (m)
         x = matrix_list.n  # Length or num of cols (n)
 
+        # Iterate through matrix and append to new list
         for i in range(y):
             for j in range(x):
                 data.append(matrix_list.matrix[i][j])
@@ -93,6 +98,7 @@ class Matrix:
         return data
 
     def set_matrix(self, flattened_matrix):
+        # Tracker, used to map flattened matrix to regular matrix using already established dimensions
         count = 0
         for num_row in range(self.m):
             for num_cols in range(self.n):
@@ -100,18 +106,18 @@ class Matrix:
                 count += 1
 
     def update(self, size_m, size_n):
+        # Tracker var used to assign default values to each spot of the matrix
         count = 1
 
+        # Create Matrix
         for size_m in range(self.m):
-            # Row
             row = []
             for size_n in range(self.n):
-                # Column
                 row.append(count)
                 count += 1
             self.matrix.append(row)
 
-        # Finds the length of the longest element
+        # Finds the length of the longest element (uses current max as reference)
         current_max = self.max_char_length
         for r in self.matrix:
             for item in r:
@@ -124,7 +130,7 @@ class Matrix:
         self.max_char_length = current_max + 1
 
     def identity(self):
-        # transforms the matrix into the identity matrix
+        # Transforms the matrix into the identity matrix
         # Instead of having to loop through a 2d list each time to update lets try having one list data
         # with the entries in order but flattened
         for i in range(self.m):
