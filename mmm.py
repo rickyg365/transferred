@@ -13,7 +13,7 @@ Date: 03/08/2021
 
 
 def clear_screen():
-    os.system("cls")
+    os.system("clear")
 
 
 class Matrix:
