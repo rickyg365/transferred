@@ -7,16 +7,19 @@ import threading
 
 from pytube import YouTube
 
+
 def clear_screen():
     os.system("clear")
 
 
 def load(chunk, file_handle, bytes_remaining):
+    # noinspection PyPep8Naming
     contentSize = video.filesize
     size = contentSize - bytes_remaining
 
-    print('\r' + '[Download progress]:[%s%s]%.2f%%;' % (
-    '█' * int(size*20/contentSize), ' '*(20-int(size*20/contentSize)), float(size/contentSize*100)), end='')
+    print('\r' + '[Download progress]:[%s%s]%.2f%%;' % ('█' * int(size*20/contentSize),
+                                                        ' '*(20-int(size*20/contentSize)),
+                                                        float(size/contentSize*100)), end='')
 
 
 def finish(arg1=None, arg2=None):
@@ -27,7 +30,7 @@ def startup():
     clear_screen()
     count = 0
     loops = 0
-    max_loops = 31
+    max_loops = 39
     loadin = True
     while loadin:
         states = [
@@ -46,7 +49,8 @@ def startup():
         print('\r' + states[count], end='')
         count += 1
         loops += 1
-        time.sleep(0.40)
+        time.sleep(0.30)
+
 
 url = input("Youtube URL: ")
 path = "~/downloads/"
@@ -54,19 +58,23 @@ path = "~/downloads/"
 try:
     th = threading.Thread(target=startup)
     th.start()
-    yt = YouTube(url, on_progress_callback = load, on_complete_callback = finish)
+    yt = YouTube(url, on_progress_callback=load, on_complete_callback=finish)
     th.join()
 except VideoUnavailable:
+    yt = None
     print(f"Video unavailable: {url}")
 
+# Video Info
 title = yt.title
+description = yt.description
+# Length
 raw_len = yt.length
 length_min = raw_len//60
-length_sec = raw_len%60 
-description = yt.description
-video = yt.streams.get_lowest_resolution()
+length_sec = raw_len % 60
 
+# Download
 # yt.streams.get_lowest_resolution().download()
+
 clear_screen()
 print(f"{title}\t|{length_min}m {length_sec}s|")
 
@@ -74,5 +82,6 @@ down = input("\n Download?: ")
 
 print("\n")
 if down.lower() == 'y':
+    res = input("\nWhat quality: ")
+    video = yt.streams.get_by_resolution(res)
     video.download()  # path)
-# print(description)
