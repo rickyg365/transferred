@@ -31,8 +31,9 @@ def load(chunk, file_handle, bytes_remaining):
     size = contentSize - bytes_remaining
 
     print('\r' + '[Download progress]:[%s%s]%.2f%%;' % (
-    '#' * int(size*20/contentSize), ' '*(20-int(size*20/contentSize)), float(size/contentSize*100)), end='')
+    '█' * int(size*20/contentSize), ' '*(20-int(size*20/contentSize)), float(size/contentSize*100)), end='')
 # '█'
+
 
 def finish(arg1=None, arg2=None):
     print('\r' + '[Download Completed]:D'+28*' ')
@@ -68,13 +69,15 @@ th.join()
 title = yt.title
 raw_len = yt.length
 length_min = raw_len//60
-length_sec = raw_len%60 
+length_sec = raw_len%60
 description = yt.description
 video = yt.streams.get_lowest_resolution()
 
+width, rows = os.get_terminal_size()
+
 # yt.streams.get_lowest_resolution().download()
 # clear_screen()
-print(f"{50*'_'}\n{length_min}m {length_sec}s | {title}")
+print(f"{width*'_'}\n{length_min}m {length_sec}s | {title}")
 
 down = input("\nWould you like to download?(y/n): ")
 
